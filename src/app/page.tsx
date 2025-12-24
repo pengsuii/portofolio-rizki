@@ -83,7 +83,7 @@ export default function Home() {
             className="absolute top-0 left-1/2 -translate-x-1/2 lg:left-auto lg:right-40 lg:translate-x-0 z-0 flex items-start justify-center lg:justify-start"
             style={{ pointerEvents: 'auto' }}
           >
-            <div className="w-[min(95vw,420px)] lg:w-[420px] h-[420px] sm:h-[520px] lg:h-[620px] lg:pl-0 xl:pl-0 flex items-start justify-center">
+            <div className="w-[min(90vw,320px)] sm:w-[min(95vw,420px)] lg:w-[420px] h-[280px] sm:h-[420px] md:h-[520px] lg:h-[620px] lg:pl-0 xl:pl-0 flex items-start justify-center">
               <div className="w-full h-full" style={{ pointerEvents: 'auto' }}>
                 <Lanyard position={[0, 0, 12]} gravity={[0, -40, 0]} fov={18} />
               </div>
@@ -91,7 +91,7 @@ export default function Home() {
           </div>
 
           <div className="container mx-auto px-4 sm:px-9 lg:px-8 w-full relative z-10 pointer-events-none">
-            <div className="flex flex-col justify-center space-y-6 lg:space-y-8 max-w-2xl pointer-events-auto">
+            <div className="flex flex-col justify-center space-y-4 sm:space-y-6 lg:space-y-8 max-w-2xl pointer-events-auto">
               <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                 <h1 className="text-xl sm:text-2xl lg:text-3xl text-gray-100 font-bold">
                   I'm Ready For Job

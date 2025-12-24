@@ -73,7 +73,7 @@ export default function About() {
                     <div className="flex justify-center sm:justify-start">
                       <Carousel
                         items={skillsCarouselItems}
-                        baseWidth={360}
+                        baseWidth={280}
                         autoplay
                         autoplayDelay={3500}
                         pauseOnHover
@@ -90,8 +90,13 @@ export default function About() {
                   </div>
                 </div>
                 <div className="flex flex-col items-center lg:items-end lg:pr-10 gap-6">
-                  <Stack randomRotation sendToBackOnClick cardDimensions={{ width: 280, height: 360 }} />
-                  <div className="w-full max-w-[280px] mt-12 sm:mt-20 lg:mt-28">
+                  <div className="hidden sm:block">
+                    <Stack randomRotation sendToBackOnClick cardDimensions={{ width: 280, height: 360 }} />
+                  </div>
+                  <div className="sm:hidden">
+                    <Stack randomRotation sendToBackOnClick cardDimensions={{ width: 200, height: 260 }} />
+                  </div>
+                  <div className="w-full max-w-[280px] mt-8 sm:mt-12 lg:mt-28">
                     <GradientText
                       colors={['#E78B48', '#6A4DFF', '#E78B48']}
                       animationSpeed={8}

@@ -87,3 +87,53 @@
     transform: translateY(0);
   }
 }
+
+@keyframes motion {
+  0%, 50%, 100% {
+    transform: translateX(0) scale(1);
+  }
+  25% {
+    transform: translateX(-100px) scale(0.3);
+  }
+  75% {
+    transform: translateX(100px) scale(0.3);
+  }
+}
+
+.loader {
+  position: relative;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+@media (min-width: 640px) {
+  .loader {
+    font-size: 36px;
+    letter-spacing: 1.5px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .loader {
+    font-size: 48px;
+    letter-spacing: 2px;
+  }
+}
+
+.loader:before {
+  content: "wait a second";
+  color: #fff;
+}
+
+.loader:after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-color: #5227FF;
+  border-radius: 50%;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  top: -70px;
+  animation: motion 3s ease-in-out infinite;
+}

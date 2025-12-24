@@ -1,6 +1,6 @@
 'use client';
 import { motion, PanInfo, useMotionValue } from 'motion/react';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FiChevronDown, FiChevronLeft, FiChevronRight, FiChevronUp, FiCode, FiExternalLink, FiFileText, FiGithub } from 'react-icons/fi';
 import { SiLaravel, SiNextdotjs, SiReact, SiTailwindcss, SiTypescript } from 'react-icons/si';
 import LogoLoop from '../../animations/LogoLoop/LogoLoop';
@@ -84,10 +84,26 @@ export default function Projects() {
 
 function ProjectsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerView, setItemsPerView] = useState(1);
   const x = useMotionValue(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const itemsPerView = 3;
+  useEffect(() => {
+    const updateItemsPerView = () => {
+      if (window.innerWidth >= 1024) {
+        setItemsPerView(3);
+      } else if (window.innerWidth >= 640) {
+        setItemsPerView(2);
+      } else {
+        setItemsPerView(1);
+      }
+    };
+    
+    updateItemsPerView();
+    window.addEventListener('resize', updateItemsPerView);
+    return () => window.removeEventListener('resize', updateItemsPerView);
+  }, []);
+  
   const maxIndex = Math.max(0, projectsData.length - itemsPerView);
   
   const goToNext = () => {
@@ -118,7 +134,7 @@ function ProjectsCarousel() {
   const canGoPrev = currentIndex > 0;
   
   return (
-    <div className="relative px-8 lg:px-12">
+    <div className="relative px-4 sm:px-8 lg:px-12">
       {/* Navigation Arrows */}
       {canGoPrev && (
         <button
@@ -146,7 +162,7 @@ function ProjectsCarousel() {
         className="relative overflow-hidden"
       >
         <motion.div
-          className="flex gap-6"
+          className="flex gap-4 sm:gap-6"
           drag="x"
           dragConstraints={{
             left: 0,
@@ -155,7 +171,7 @@ function ProjectsCarousel() {
           dragElastic={0.2}
           onDragEnd={handleDragEnd}
           animate={{
-            x: `-${currentIndex * (100 / itemsPerView)}%`
+            x: itemsPerView > 0 ? `-${currentIndex * (100 / itemsPerView)}%` : 0
           }}
           transition={{
             type: 'spring',
