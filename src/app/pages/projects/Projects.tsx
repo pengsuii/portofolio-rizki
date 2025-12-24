@@ -2,7 +2,7 @@
 import { motion, PanInfo, useMotionValue } from 'motion/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { FiChevronDown, FiChevronLeft, FiChevronRight, FiChevronUp, FiCode, FiExternalLink, FiFileText, FiGithub } from 'react-icons/fi';
-import { SiLaravel, SiNextdotjs, SiReact, SiTailwindcss, SiTypescript } from 'react-icons/si';
+import { SiJavascript, SiLaravel, SiNextdotjs, SiReact, SiTailwindcss, SiTypescript } from 'react-icons/si';
 import LogoLoop from '../../animations/LogoLoop/LogoLoop';
 import BlurText from '../../components/BlurText/BlurText';
 import SplitText from '../../components/SplitText/SplitText';
@@ -14,8 +14,9 @@ export default function Projects() {
     { node: <SiReact className="text-white w-10 h-10" />, title: "React"},
     { node: <SiNextdotjs className="text-white w-10 h-10" />, title: "Next.js"},
     { node: <SiTypescript className="text-white w-10 h-10" />, title: "TypeScript"},
+    { node: <SiJavascript className="text-white w-10 h-10" />, title: "JavaScript"},
     { node: <SiTailwindcss className="text-white w-10 h-10" />, title: "Tailwind CSS"},
-    { node: <SiLaravel className='text-white w-10 h-10' />, tittle: "Laravel"}
+    { node: <SiLaravel className='text-white w-10 h-10' />, title: "Laravel"}
   ], []);
   return (
     <section id="projects" className="relative py-8 sm:py-12 lg:py-16">
@@ -45,7 +46,7 @@ export default function Projects() {
               {/* Description */}
               <div className="mb-8 sm:mb-12">
                 <BlurText
-                  text="Berikut adalah beberapa proyek yang telah saya kerjakan, mencakup pengembangan web, mobile, dan implementasi testing automation. Setiap proyek mencerminkan dedikasi saya terhadap kualitas dan inovasi."
+                  text="Kumpulan proyek yang telah saya kembangkan, mulai dari aplikasi web dengan machine learning, website modern dengan teknologi terkini, hingga framework automation testing untuk memastikan kualitas software."
                   delay={150}
                   animateBy="words"
                   direction="top"

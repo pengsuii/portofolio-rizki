@@ -81,13 +81,11 @@ function Band({ maxSpeed = 50, minSpeed = 0, xOffset = 0, delay = 0, rotationOff
     j3 = useRef(),
     card = useRef();
   const vec = new THREE.Vector3(),
-    ang = new THREE.Vector3(),
-    rot = new THREE.Vector3(),
     dir = new THREE.Vector3();
   const segmentProps = { type: 'dynamic', canSleep: true, colliders: false, angularDamping: 5, linearDamping: 5 };
   const { nodes, materials } = useGLTF(cardGLB);
   const texture = useTexture(lanyard);
-  const { gl, clock } = useThree();
+  const { gl } = useThree();
   const [curve] = useState(
     () =>
       new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
@@ -95,10 +93,6 @@ function Band({ maxSpeed = 50, minSpeed = 0, xOffset = 0, delay = 0, rotationOff
   const [dragged, drag] = useState(false);
   const [hovered, hover] = useState(false);
   const [isSmall, setIsSmall] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
-  const prevPos = useRef(new THREE.Vector3());
-  const prevTime = useRef(0);
-  const targetAngVel = useRef(new THREE.Vector3());
-  const currentAngVel = useRef(new THREE.Vector3());
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1.2]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1.2]);
@@ -131,45 +125,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, xOffset = 0, delay = 0, rotationOff
       dir.copy(vec).sub(state.camera.position).normalize();
       vec.add(dir.multiplyScalar(state.camera.position.length()));
       [card, j1, j2, j3, fixed].forEach(ref => ref.current?.wakeUp());
-      
-      const newPos = new THREE.Vector3(vec.x - dragged.x, vec.y - dragged.y, vec.z - dragged.z);
-      const currentTime = clock.elapsedTime;
-      
-      // Hitung velocity dari pergerakan
-      if (prevTime.current > 0) {
-        const timeDelta = currentTime - prevTime.current;
-        if (timeDelta > 0) {
-          const velocity = new THREE.Vector3()
-            .subVectors(newPos, prevPos.current)
-            .divideScalar(timeDelta);
-          
-          const speed = velocity.length();
-          if (speed > 0.01) {
-            // Tambahkan rotasi berdasarkan arah gerak dengan smoothing (reduced rotation)
-            const rotationSpeed = speed * 0.1;
-            targetAngVel.current.set(
-              -velocity.y * 0.08, 
-              rotationSpeed, 
-              velocity.x * 0.08
-            );
-          } else {
-            targetAngVel.current.set(0, 0, 0);
-          }
-          
-          currentAngVel.current.lerp(targetAngVel.current, Math.min(delta * 10, 0.3));
-          card.current?.setAngvel({ 
-            x: currentAngVel.current.x, 
-            y: currentAngVel.current.y, 
-            z: currentAngVel.current.z 
-          });
-        }
-      }
-      
-      prevPos.current.copy(newPos);
-      prevTime.current = currentTime;
-      card.current?.setNextKinematicTranslation({ x: newPos.x, y: newPos.y, z: newPos.z });
-    } else {
-      prevTime.current = 0;
+      card.current?.setNextKinematicTranslation({ x: vec.x - dragged.x, y: vec.y - dragged.y, z: vec.z - dragged.z });
     }
     if (fixed.current) {
       [j1, j2].forEach(ref => {
@@ -186,41 +142,6 @@ function Band({ maxSpeed = 50, minSpeed = 0, xOffset = 0, delay = 0, rotationOff
       curve.points[2].copy(j1.current.lerped);
       curve.points[3].copy(fixed.current.translation());
       band.current.geometry.setPoints(curve.getPoints(32));
-      
-      if (!dragged && card.current) {
-        // Rotasi natural saat tidak ditarik - ALWAYS keep rotating
-        ang.copy(card.current.angvel());
-        rot.copy(card.current.rotation());
-        const velocity = card.current.linvel();
-        const speed = Math.sqrt(velocity.x ** 2 + velocity.y ** 2 + velocity.z ** 2);
-        
-        // Konstanta untuk rotasi minimum agar kartu selalu bergerak dengan delay dan offset
-        const timeWithDelay = state.clock.elapsedTime - delay;
-        const minRotationY = 0.6 + rotationOffset * 0.3; // Rotasi Y minimum lebih tinggi untuk movement jelas
-        
-        if (speed > 0.1) {
-          // Rotasi berdasarkan kecepatan gerak dengan smoothing
-          targetAngVel.current.set(
-            ang.x * 0.9 - velocity.y * 0.06 + Math.sin(timeWithDelay * 0.8) * 0.1, 
-            ang.y * 0.9 + speed * 0.2 + minRotationY, // Tambahkan rotasi minimum 
-            ang.z * 0.9 + velocity.x * 0.06 + Math.cos(timeWithDelay * 0.6) * 0.1
-          );
-        } else {
-          // Tetap berikan rotasi minimum bahkan saat hampir diam dengan variasi per card
-          targetAngVel.current.set(
-            ang.x * 0.8 + Math.sin(timeWithDelay * 0.8 + rotationOffset) * 0.15, 
-            minRotationY + Math.cos(timeWithDelay * 0.5 + rotationOffset * 2) * 0.2, // ALWAYS rotate dengan amplitude lebih besar
-            ang.z * 0.8 + Math.sin(timeWithDelay * 1.0 + rotationOffset * 1.5) * 0.15
-          );
-        }
-        
-        currentAngVel.current.lerp(targetAngVel.current, Math.min(delta * 8, 0.25));
-        card.current.setAngvel({ 
-          x: currentAngVel.current.x, 
-          y: currentAngVel.current.y, 
-          z: currentAngVel.current.z 
-        });
-      }
     }
   });
 
@@ -265,13 +186,6 @@ function Band({ maxSpeed = 50, minSpeed = 0, xOffset = 0, delay = 0, rotationOff
               if (gl && gl.domElement && gl.domElement.setPointerCapture) {
                 gl.domElement.setPointerCapture(e.pointerId);
               }
-              if (card.current) {
-                const currentPos = card.current.translation();
-                prevPos.current.set(currentPos.x, currentPos.y, currentPos.z);
-                prevTime.current = 0;
-                targetAngVel.current.set(0, 0, 0);
-                currentAngVel.current.set(0, 0, 0);
-              }
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
             }}
           >
@@ -296,13 +210,6 @@ function Band({ maxSpeed = 50, minSpeed = 0, xOffset = 0, delay = 0, rotationOff
                 e.stopPropagation();
                 if (gl && gl.domElement && gl.domElement.setPointerCapture) {
                   gl.domElement.setPointerCapture(e.pointerId);
-                }
-                if (card.current) {
-                  const currentPos = card.current.translation();
-                  prevPos.current.set(currentPos.x, currentPos.y, currentPos.z);
-                  prevTime.current = 0;
-                  targetAngVel.current.set(0, 0, 0);
-                  currentAngVel.current.set(0, 0, 0);
                 }
                 drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
               }}

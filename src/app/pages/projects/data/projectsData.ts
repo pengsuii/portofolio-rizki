@@ -47,28 +47,28 @@ export const projectsData: Project[] = [
     title: 'Test Case KliknClean Cleaner App',
     shortDescription: 'Desain dan implementasi UI/UX untuk aplikasi mobile dengan fokus pada aksesibilitas.',
     description: 'Desain dan implementasi UI/UX untuk aplikasi mobile dengan fokus pada aksesibilitas dan user experience. Mencakup design system yang konsisten dan reusable components.',
-    technologies: ['React Native', 'TypeScript', 'Figma', 'Design System'],
+    technologies: ['Manual Testing', 'QA', 'Test Planning'],
     sheetsUrl: 'https://docs.google.com/spreadsheets/d/1Z78Xdx7Wqlbk5Qs_oUBfZh-aZbeTp4ENNQp53QJmqqw/edit?usp=sharing',
     category: 'qa'
   },
+  
   {
     id: 5,
-    title: 'API Testing Framework',
-    shortDescription: 'Framework testing untuk REST API dengan validasi response dan performance testing.',
-    description: 'Framework testing untuk REST API dengan validasi response, error handling, dan performance testing. Terintegrasi dengan reporting tools untuk tracking kualitas API.',
-    technologies: ['Postman', 'Newman', 'JavaScript', 'API Testing', 'Reporting'],
-    githubUrl: 'https://github.com',
+    title: 'E2E Automation Testing dengan Playwright',
+    shortDescription: 'Mengembangkan dan mengimplementasikan framework automation testing end-to-end menggunakan Playwright untuk memastikan kualitas web application.',
+    description: 'Bertanggung jawab dalam membangun framework automation testing end-to-end menggunakan Playwright untuk menguji fungsionalitas web application. Mencakup implementasi UI testing, API testing, visual regression testing, dan cross-browser testing. Mengintegrasikan framework dengan CI/CD pipeline untuk automated testing dan membuat HTML reporting system untuk tracking hasil testing. Framework ini membantu meningkatkan efisiensi testing dan mengurangi waktu manual testing secara signifikan.',
+    technologies: ['Playwright', 'Javascript', 'E2E Testing', 'CI/CD', 'Test Automation'],
     category: 'qa'
   },
   {
     id: 6,
-    title: 'Dashboard Analytics',
-    shortDescription: 'Dashboard analytics real-time dengan visualisasi data interaktif.',
-    description: 'Dashboard analytics real-time dengan visualisasi data interaktif. Menampilkan metrik penting dengan chart yang responsif dan filter data yang powerful.',
-    technologies: ['React', 'D3.js', 'TypeScript', 'Chart.js', 'WebSocket'],
-    githubUrl: 'https://github.com',
-    liveUrl: 'https://example.com',
+    title: 'Tas Sablon Express Profile Website',
+    shortDescription: 'Website profil untuk Tas Sablon Express dengan desain modern dan responsif.',
+    description: 'Website profil untuk Tas Sablon Express yang menampilkan informasi tentang layanan sablon tas.',
+    technologies: ['Express.JS', 'HTML', 'CSS', 'React.JS'],
+    githubUrl: 'https://github.com/pengsuii/Tas-Sablon',
     category: 'web'
   }
+  
 ];
 
